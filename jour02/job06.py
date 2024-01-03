@@ -1,19 +1,7 @@
-'''Créer une classe Commande avec les attributs privés, numéro de commande, liste de
-plats commandés et statut de la commande (en cours, terminée ou annulée). Ajouter
-des méthodes permettant d’ajouter un plat à la commande , annuler une commande,
-calculer le total d’une commande qui doit être en privé et afficher une commande avec
-son total à payer, ainsi qu’une méthode permettant de calculer la TVA. Utiliser
-l’encapsulation et l’abstraction pour créer cette classe de manière que les attributs ne
-puissent pas être modifiés de l’extérieur. La liste des plats commandés doit être
-représentée sous forme de dictionnaire avec les noms des plats, le prix ainsi que le
-statut de la commande.
-'''
-
-
 class Commande:
-    def __init__(self, num_commande, plat_commande, statut_commande):
+    def __init__(self, num_commande, statut_commande = "en cours"):
         self.__num_commande = num_commande
-        self.__plat_commande = plat_commande
+        self.__plat_commande = {}
         self.__statut_commande = statut_commande
 
 
@@ -35,17 +23,52 @@ class Commande:
     def set_statut_commande(self, statut_commande):
         self.__statut_commande = statut_commande
     
-    def ajout_plat(self):
-        pass
 
-    def annuler_plat(self):
-        pass
+
+    def ajout_plat(self, nom_plat, prix_plat):
+        if nom_plat in self.__plat_commande:
+            print(f"{nom_plat} est déjà en commande")
+        else :
+            self._Commande__plat_commande[nom_plat] = {'prix': prix_plat, 'statut': 'En cours'}
+
+    def annuler_plat(self, nom_plat):
+        if nom_plat in self.__plat_commande:
+            del self.__plat_commande[nom_plat]
+            print(f"Plat '{nom_plat}' annulé de la commande.")
+        else:
+            print(f"Le plat '{nom_plat}' n'est pas dans la commande.")
+        return self.__plat_commande
 
     def __total_payer(self):
-        pass
+        total = sum(plat['prix'] for plat in self.__plat_commande.values())
+        return total
 
     def afficher_commande(self):
-        pass
+        print(f"\nCommande n°{self.__num_commande}:")
+        for plat, details in self.__plat_commande.items():
+            print(f"{plat} - {details['prix']} € ({details['statut']})")
+        total = self.__total_payer()
+        print(f"\nTotal à payer: {total} € (TVA incluse)")
 
-    def calcul_TVA(self):
-        pass
+    def calcul_TVA(self, taux_tva):
+        total = self.__total_payer()
+        tva = total * (taux_tva / 100)
+        print(f"TVA ({taux_tva}%): {tva} €")
+
+
+commande1 = Commande(1)
+
+commande1.ajout_plat ("Poulet curry", 13)
+commande1.ajout_plat ("Tatami de dojo", 9.50)
+commande1.ajout_plat ("Rognure d'ongle", 10)
+
+commande1.calcul_TVA(20)
+
+commande1.afficher_commande()
+
+commande1.annuler_plat("Poulet curry")
+commande1.afficher_commande()
+
+
+
+    
