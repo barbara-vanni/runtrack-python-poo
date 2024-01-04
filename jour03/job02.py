@@ -40,13 +40,17 @@ class CompteBancaire:
 
    
     def afficher_detail(self):
-        pass
+        print(f"\nNuméro de compte: {self.__num_compte}")
+        print(f"Nom: {self.__nom}")
+        print(f"Prénom: {self.__prenom}")
+        print(f"Solde: {self.__solde} €\n")
 
     def afficher_solde(self):
         print (f"Le solde du compte{self.get_num_compte()} est {self.get_solde()}")
 
     def versement(self, montant_verse):
         self.__solde += montant_verse
+        print(f"Montant de {montant_verse} € à été versé sur votre compte")
 
     def retrait(self, montant_retire):
         if self.__solde < montant_retire and self.__decouvert == False:
@@ -54,6 +58,7 @@ class CompteBancaire:
         else: 
             self.__solde -= montant_retire
             self.decouvert()
+            print(f"Montant de {montant_retire} € à été retiré de votre compte")
 
     def decouvert(self, taux_agios = 0.5):
         if self.__decouvert == True and self.__solde < 0:
@@ -74,7 +79,7 @@ compte1 = CompteBancaire(1, "Vanni", "Barbara", 1750)
 
 compte2 = CompteBancaire(2, "Toto", "Fifi", -20)
 
-compte1.afficher_solde()
+compte1.afficher_detail()
 
 compte1.versement(50)
 compte1.afficher_solde()
@@ -82,7 +87,7 @@ compte1.afficher_solde()
 compte1.retrait(1000)
 compte1.afficher_solde()
 
-compte2.afficher_solde()
+compte2.afficher_detail()
 
 compte1.virement(1,compte2, 20)
 compte1.afficher_solde()
