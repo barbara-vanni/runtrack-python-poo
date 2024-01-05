@@ -1,5 +1,5 @@
 class Personnage:
-    def __init__(self, age):
+    def __init__(self, age = 14):
         self._age = age
 
     def get_age(self):
@@ -37,7 +37,7 @@ class Professeur(Personnage):
         print("Le cours va commencer")
 
 
-eleve = Eleve(15)
+eleve = Eleve(14)
 gardien = Personnage(50)
 
 eleve.afficherAge()
