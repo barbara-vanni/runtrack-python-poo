@@ -55,13 +55,14 @@ class Jeu(Carte):
             value -= 10
         return value
 
-player_hand = []
-dealer_hand = []
-player_score = 0
-dealer_score = 0   
+
 
 def BlackJack():
     run = True
+    player_hand = []
+    dealer_hand = []
+    player_score = 0
+    dealer_score = 0   
 
     while len(player_hand) < 2:
         jeu.deal_cards(player_hand)
@@ -69,46 +70,71 @@ def BlackJack():
         player_score += jeu.calculate_hand_value(player_hand)
 
         # check if the first two cards are aces and if so, subtract 10 from the player_score
-        if len(player_hand) == 2:
-            if player_hand[0].cards_values == 'Ace' and player_hand[1].cards_values == 'Ace':
-                player_score -= 10
+        # if len(player_hand) == 2:
+        #     if player_hand[0].cards_values == 'Ace' and player_hand[1].cards_values == 'Ace':
+        #         player_score -= 10
         print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
 
         jeu.deal_cards(dealer_hand)
         dealer_score += jeu.calculate_hand_value(dealer_hand)
 
-        if len(dealer_hand) == 2:
-            if dealer_hand[0].cards_values == 'Ace' and dealer_hand[1].cards_values == 'Ace':
-                dealer_score -= 10
+        # if len(dealer_hand) == 2:
+        #     if dealer_hand[0].cards_values == 'Ace' and dealer_hand[1].cards_values == 'Ace':
+        #         dealer_score -= 10
 
         print(f"Dealer card is {dealer_hand} with {jeu.calculate_hand_value(dealer_hand)} points")
 
-        if player_score == 21:
-            print('Player wins!')
-            run = False
+    if player_score == 21:
+        print('Player wins!')
+        run = False
+
+
+    while player_score < 21 :
+
+        choice = input('Do you want to hit (h) or stand (s)? ')
+
+        if choice == 'h':
+            jeu.hit(player_hand)
+            player_score += jeu.calculate_hand_value(player_hand)
+            print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
+        elif choice == 's':
             break
-
-        while player_score < 21 :
-
-            choice = input('Do you want to hit (h) or stand (s)? ')
-
-            if choice == 'h':
-                jeu.hit(player_hand)
-                player_score += jeu.calculate_hand_value(player_hand)
-                print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
-
-                if player_score == 21:
-                    print('Player wins!')
-                    run = False
-                    break
-                if player_score > 21:
-                    print('Player loses!')
-                    run = False
-                    break
-                
-            elif choice == 's':
-                break
         
+
+    # if player_score == 21:
+    #     print('Player wins!')
+    #     run = False
+
+    # if player_score > 21:
+    #     print('Player loses!')
+    #     run = False
+            
+    while dealer_score < 21:
+        if dealer_score < 17:
+            jeu.hit(dealer_hand)
+            dealer_score += jeu.calculate_hand_value(dealer_hand)
+            print(f"Dealer card is {dealer_hand} with {jeu.calculate_hand_value(dealer_hand)} points")
+        else:
+            break
+        
+    if dealer_score == 21:
+        print('Dealer wins!')
+        run = False
+
+    if dealer_score > 21:    
+        print('Dealer loses!')
+        run = False
+
+    if dealer_score == player_score:
+        print('Tie game !')
+        run = False
+
+    elif player_score > dealer_score:
+        print('Player wins!')
+        run = False
+    else:
+        print('Dealer wins!')
+        run = False
 
 
 
