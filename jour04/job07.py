@@ -63,37 +63,53 @@ dealer_score = 0
 def BlackJack():
     run = True
 
-    while run:
+    while len(player_hand) < 2:
         jeu.deal_cards(player_hand)
-        jeu.deal_cards(dealer_hand)
-        print(f"La main du joueur est {player_hand} comptabilisant {jeu.calculate_hand_value(player_hand)}")
-        print(f"La main du dealer est {dealer_hand} comptabilisant {jeu.calculate_hand_value(dealer_hand)}")
 
-        while True:
-            action = input('Do you want to hit or stand? ')
-            if action.lower() == 'hit':
+        player_score += jeu.calculate_hand_value(player_hand)
+
+        # check if the first two cards are aces and if so, subtract 10 from the player_score
+        if len(player_hand) == 2:
+            if player_hand[0].cards_values == 'Ace' and player_hand[1].cards_values == 'Ace':
+                player_score -= 10
+        print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
+
+        jeu.deal_cards(dealer_hand)
+        dealer_score += jeu.calculate_hand_value(dealer_hand)
+
+        if len(dealer_hand) == 2:
+            if dealer_hand[0].cards_values == 'Ace' and dealer_hand[1].cards_values == 'Ace':
+                dealer_score -= 10
+
+        print(f"Dealer card is {dealer_hand} with {jeu.calculate_hand_value(dealer_hand)} points")
+
+        if player_score == 21:
+            print('Player wins!')
+            run = False
+            break
+
+        while player_score < 21 :
+
+            choice = input('Do you want to hit (h) or stand (s)? ')
+
+            if choice == 'h':
                 jeu.hit(player_hand)
-                print(f"La main du joueur est {player_hand} comptabilisant {jeu.calculate_hand_value(player_hand)}")
-                if int(jeu.calculate_hand_value(player_hand)) > 21:
-                    print('Player loses the game!')
+                player_score += jeu.calculate_hand_value(player_hand)
+                print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
+
+                if player_score == 21:
+                    print('Player wins!')
                     run = False
                     break
-            elif action.lower() == 'stand':
+                if player_score > 21:
+                    print('Player loses!')
+                    run = False
+                    break
+                
+            elif choice == 's':
                 break
+        
 
-        while jeu.calculate_hand_value(dealer_hand) < 17:
-            jeu.hit(dealer_hand)
-            print(f"La main du dealer est {dealer_hand} comptabilisant {jeu.calculate_hand_value(dealer_hand)}")
-
-    if jeu.calculate_hand_value(dealer_hand) > 21:
-        print('Dealer loses the game! YOU WIN!')
-
-    if jeu.calculate_hand_value(player_hand) > jeu.calculate_hand_value(dealer_hand):
-        print('Player wins!')
-    elif jeu.calculate_hand_value(player_hand) < jeu.calculate_hand_value(dealer_hand):
-        print('Dealer wins!')
-    else:
-        print('It\'s a tie!')
 
 
 carte_deck = Carte()
