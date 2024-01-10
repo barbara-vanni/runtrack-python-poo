@@ -54,6 +54,21 @@ class Jeu(Carte):
         if has_ace and value > 21:
             value -= 10
         return value
+    
+    def compare(self, player_hand, dealer_hand):
+        player_score = self.calculate_hand_value(player_hand)
+        dealer_score = self.calculate_hand_value(dealer_hand)
+
+        if player_score > dealer_score and player_score <= 21:
+            print("You win!")
+        elif player_score == dealer_score and player_score <= 21:
+            print("It's a tie!")
+        elif player_score < dealer_score and dealer_score <= 21:
+            print("You lose!")
+        elif player_score > 21:
+            print("You lose!")
+        elif dealer_score > 21:
+            print("You win!")
 
 
 
@@ -73,7 +88,7 @@ def BlackJack():
         # if len(player_hand) == 2:
         #     if player_hand[0].cards_values == 'Ace' and player_hand[1].cards_values == 'Ace':
         #         player_score -= 10
-        print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
+        print(f"Player card is {player_hand} with {player_score} points")
 
         jeu.deal_cards(dealer_hand)
         dealer_score += jeu.calculate_hand_value(dealer_hand)
@@ -82,12 +97,7 @@ def BlackJack():
         #     if dealer_hand[0].cards_values == 'Ace' and dealer_hand[1].cards_values == 'Ace':
         #         dealer_score -= 10
 
-        print(f"Dealer card is {dealer_hand} with {jeu.calculate_hand_value(dealer_hand)} points")
-
-    if player_score == 21:
-        print('Player wins!')
-        run = False
-
+        print(f"Dealer card is {dealer_hand} with {dealer_score} points")
 
     while player_score < 21 :
 
@@ -96,45 +106,20 @@ def BlackJack():
         if choice == 'h':
             jeu.hit(player_hand)
             player_score += jeu.calculate_hand_value(player_hand)
-            print(f"Player card is {player_hand} with {jeu.calculate_hand_value(player_hand)} points")
+            print(f"Player card is {player_hand} with {player_score} points")
         elif choice == 's':
             break
-        
 
-    # if player_score == 21:
-    #     print('Player wins!')
-    #     run = False
-
-    # if player_score > 21:
-    #     print('Player loses!')
-    #     run = False
             
     while dealer_score < 21:
         if dealer_score < 17:
             jeu.hit(dealer_hand)
             dealer_score += jeu.calculate_hand_value(dealer_hand)
-            print(f"Dealer card is {dealer_hand} with {jeu.calculate_hand_value(dealer_hand)} points")
+            print(f"Dealer card is {dealer_hand} with {dealer_score} points")
         else:
             break
         
-    if dealer_score == 21:
-        print('Dealer wins!')
-        run = False
-
-    if dealer_score > 21:    
-        print('Dealer loses!')
-        run = False
-
-    if dealer_score == player_score:
-        print('Tie game !')
-        run = False
-
-    elif player_score > dealer_score:
-        print('Player wins!')
-        run = False
-    else:
-        print('Dealer wins!')
-        run = False
+    jeu.compare(player_hand, dealer_hand)
 
 
 
